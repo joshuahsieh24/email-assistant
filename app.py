@@ -1,26 +1,25 @@
-"""Simple FastAPI app for Railway deployment."""
+"""Simple Flask app for Railway deployment."""
 
-from fastapi import FastAPI
-from fastapi.responses import JSONResponse
+from flask import Flask, jsonify
 
-# Create FastAPI app
-app = FastAPI(
-    title="OpenAI Gateway",
-    version="0.1.0",
-)
+# Create Flask app
+app = Flask(__name__)
 
-@app.get("/healthz")
-async def health_check():
+@app.route('/healthz')
+def health_check():
     """Health check endpoint."""
-    return JSONResponse(
-        content={
-            "status": "healthy",
-            "version": "0.1.0",
-            "redis_status": "unavailable"
-        }
-    )
+    return jsonify({
+        "status": "healthy",
+        "version": "0.1.0",
+        "redis_status": "unavailable"
+    })
 
-@app.get("/")
-async def root():
+@app.route('/')
+def root():
     """Root endpoint."""
-    return {"message": "OpenAI Gateway is running!"} 
+    return jsonify({"message": "OpenAI Gateway is running!"})
+
+if __name__ == '__main__':
+    import os
+    port = int(os.environ.get('PORT', 8000))
+    app.run(host='0.0.0.0', port=port) 
