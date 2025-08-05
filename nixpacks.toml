@@ -1,0 +1,8 @@
+[phases.setup]
+nixPkgs = ["python39", "pip"]
+
+[phases.install]
+cmds = ["cd openai_gateway && pip install -r requirements.txt"]
+
+[start]
+cmd = "cd openai_gateway && uvicorn app.main:app --host 0.0.0.0 --port $PORT" 
