@@ -97,10 +97,10 @@ async def startup_event():
     """Initialize services on startup."""
     try:
         await redis_manager.connect()
-        logger.info("Application started successfully")
+        logger.info("Application started successfully with Redis")
     except Exception as e:
-        logger.error(f"Failed to start application: {e}")
-        raise
+        logger.warning(f"Redis connection failed, continuing without Redis: {e}")
+        logger.info("Application started successfully without Redis")
 
 
 @app.on_event("shutdown")
@@ -152,7 +152,10 @@ async def log_requests(request: Request, call_next):
 @app.get("/healthz", response_model=HealthResponse)
 async def health_check():
     """Health check endpoint."""
-    redis_status = "connected" if await redis_manager.is_connected() else "disconnected"
+    try:
+        redis_status = "connected" if await redis_manager.is_connected() else "disconnected"
+    except Exception:
+        redis_status = "unavailable"
     
     return HealthResponse(
         status="healthy",

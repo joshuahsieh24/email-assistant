@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     port: int = Field(default=8000, env="PORT")
 
     # OpenAI Configuration
-    openai_base_url: str = Field(env="OPENAI_BASE_URL")
+    openai_base_url: str = Field(default="https://api.openai.com", env="OPENAI_BASE_URL")
     openai_api_key: str = Field(env="OPENAI_API_KEY")
 
     # Redis Configuration
@@ -24,7 +24,7 @@ class Settings(BaseSettings):
     redis_ttl_hours: int = Field(default=24, env="REDIS_TTL_HOURS")
 
     # JWT Configuration
-    jwt_secret_key: str = Field(env="JWT_SECRET_KEY")
+    jwt_secret_key: str = Field(default="default-secret-key", env="JWT_SECRET_KEY")
     jwt_algorithm: str = Field(default="HS256", env="JWT_ALGORITHM")
     jwt_expire_minutes: int = Field(default=60, env="JWT_EXPIRE_MINUTES")
 
